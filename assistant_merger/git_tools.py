@@ -130,3 +130,12 @@ def apply_changes(file_path: Path, diff: str, model_response: str) -> bool:
     except Exception as e:
         print(f"Error applying changes to {file_path}: {e}")
         return False
+
+if __name__ == '__main__':
+    path = Path("/home/charlie/test_git_diff/thing.txt")
+    diff = get_git_diff(path)
+    print(diff)
+    
+    print("\n\n=======================\n\n")
+    change = add_change_numbers(diff)
+    print(change)
