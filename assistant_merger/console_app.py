@@ -51,4 +51,3 @@ if __name__ == "__main__":
         print("Usage: python -m assistant_merger.console_app <file_path> [<file_path> ...]")
         sys.exit(1)
     run_diff_interactor(sys.argv[1:])
-###

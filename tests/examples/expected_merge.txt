@@ -26,4 +26,3 @@ class Vector2:
 
     def multiply(self, other):
         return Vector2(self.x * other.x, self.y * other.y)
-###

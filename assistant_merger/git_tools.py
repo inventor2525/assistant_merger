@@ -130,4 +130,3 @@ def apply_changes(file_path: Path, diff: str, model_response: str) -> bool:
     except Exception as e:
         print(f"Error applying changes to {file_path}: {e}")
         return False
-###
