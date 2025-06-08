@@ -97,6 +97,9 @@ def add_change_numbers(diff: str, file_path: Path) -> Tuple[str, List[Dict[str, 
             continue
         new_start = int(hunk_match.group(2))
         new_lines = int(hunk_match.group(3)) if hunk_match.group(3) else 1
+        if new_lines == 0:
+            new_start += 1
+        
         # Get lines after this hunk up to previous hunk (or end)
         start_idx = new_start - 1 + new_lines  # 0-based index
         post_hunk_lines = file_lines[start_idx:prev_end]
@@ -106,11 +109,11 @@ def add_change_numbers(diff: str, file_path: Path) -> Tuple[str, List[Dict[str, 
         hunk_output = [
             f"{hunk['header']} ({hunk['number']})",
             hunk['content'],
-            "@@ End Hunk @@"
+            f"@@ End {hunk['number']} Hunk @@"
         ] + post_hunk_lines
         # Prepend to result (building in reverse)
         result_lines = hunk_output + result_lines
-
+    result_lines = file_lines[0:prev_end] + result_lines
     return "\n".join(result_lines), hunks
 
 def apply_changes(file_path: Path, diff: str, llm_response: str) -> str:
@@ -136,11 +139,14 @@ def apply_changes(file_path: Path, diff: str, llm_response: str) -> str:
 
     # Build merged content
     merged_lines = file_lines.copy()
-    for hunk in hunks:
+    for hunk in reversed(hunks):
         change_num = hunk["number"]
         if change_num not in approvals:
             continue  # Skip if no decision for this change
-
+        
+        if approvals[change_num]:
+            continue # Skip yes's since we have those lines from the file
+        
         # Extract line numbers
         header = hunk["header"]
         hunk_match = hunk_pattern.match(header)
@@ -148,17 +154,31 @@ def apply_changes(file_path: Path, diff: str, llm_response: str) -> str:
             continue
         new_start = int(hunk_match.group(2)) - 1  # 0-based
         new_lines = int(hunk_match.group(3)) if hunk_match.group(3) else 1
-
+        new_end = new_start+new_lines
+        
         # Get diff lines
         diff_lines = hunk["content"].splitlines()
-        added_lines = [line[1:] for line in diff_lines if line.startswith('+')]
-        removed_lines = [line[1:] for line in diff_lines if line.startswith('-')]
-
-        # Apply or revert based on decision
-        if approvals[change_num]:  # Yes: apply added lines
-            merged_lines[new_start:new_start + new_lines] = added_lines
-        else:  # No: keep removed lines
-            merged_lines[new_start:new_start + new_lines] = removed_lines
+        
+        # Get original content:
+        og_lines = []
+        added_lines = False
+        for diff_line in diff_lines:
+            if diff_line[0] == ' ':
+                added_lines = True
+                og_lines.append(diff_line[1:])
+            elif diff_line[0] == '-':
+                og_lines.append(diff_line[1:])
+            else:
+                added_lines = True
+        
+        if not added_lines: #idk why line numbers for hunks that only remove lines are shifted 1 back from what I would think, but...
+            new_start += 1
+            new_end += 1
+            
+        # Revert:
+        before_hunk = merged_lines[:new_start]
+        after_hunk = merged_lines[new_end:]
+        merged_lines = before_hunk + og_lines + after_hunk
 
     return "\n".join(merged_lines)
 
@@ -175,10 +195,10 @@ if __name__ == '__main__':
         print("\nHunks:", hunks)
         
         # Hardcoded LLM response for testing (matches 5 changes)
-        llm_response = """Change #1, Yes
-Change #2, No
-Change #3, Yes
-Change #4, Yes
+        llm_response = """Change #1, No
+Change #2, Yes
+Change #3, No
+Change #4, No
 Change #5, No"""
         
         print("\nLLM Response:\n")
