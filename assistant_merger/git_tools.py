@@ -21,14 +21,15 @@ def get_git_diff(file_path: Path) -> Tuple[str, Optional[str]]:
     try:
         relative_path = file_path.relative_to(repo_path)
         result = subprocess.run(
-            ["git", "diff", "--unified=1", str(relative_path)],
+            ["git", "diff", "--unified=0", str(relative_path)],
             cwd=repo_path,
             capture_output=True,
             text=True,
             check=False
         )
         if result.returncode == 0 and result.stdout:
-            return result.stdout, None
+            s = result.stdout.split("\n")
+            return "\n".join(s[4:]), None
         return "", f"No changes or file not tracked: {relative_path}"
     except subprocess.SubprocessError as e:
         return "", f"Error running git diff: {e}"
@@ -48,10 +49,10 @@ def add_change_numbers(diff: str) -> Tuple[str, List[Dict[str, str]]]:
     hunk_start = None
 
     for line in lines:
-        if re.match(r"@@ -\d+,\d+ \+\d+,\d+ @@", line):
+        if re.match(r"@@ .* @@", line):
             if current_hunk_lines and hunk_start:
                 hunks.append({
-                    "number": f"change_{change_count}",
+                    "number": f"Change #{change_count}",
                     "header": hunk_start,
                     "content": "\n".join(current_hunk_lines)
                 })
@@ -65,7 +66,7 @@ def add_change_numbers(diff: str) -> Tuple[str, List[Dict[str, str]]]:
 
     if current_hunk_lines and hunk_start:
         hunks.append({
-            "number": f"change_{change_count}",
+            "number": f"Change #{change_count}",
             "header": hunk_start,
             "content": "\n".join(current_hunk_lines)
         })
