@@ -1,0 +1,41 @@
+@@ -0,0 +1,2 @@ (Change #1)
++import math
++
+@@ End Change #1 Hunk @@
+class Vector2:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def add(self, other):
+@@ -6,0 +9 @@ (Change #2)
++        # Optimized addition
+@@ End Change #2 Hunk @@
+        return Vector2(self.x + other.x, self.y + other.y)
+
+    def magnitude(self):
+@@ -10 +13 @@ (Change #3)
+-        return (self.x ** 2 + self.y ** 2) ** 0.5
++        return math.sqrt(self.x ** 2 + self.y ** 2)
+@@ End Change #3 Hunk @@
+
+    def scale(self, factor):
+        return Vector2(self.x * factor, self.y * factor)
+
+    def normalize(self):
+        mag = self.magnitude()
+        if mag == 0:
+            return Vector2(0, 0)
+        return Vector2(self.x / mag, self.y / mag)
+
+    def dot(self, other):
+        return self.x * other.x + self.y * other.y
+@@ -22 +25,4 @@ (Change #4)
+-        return self.x * other.x + self.y * other.y
+\ No newline at end of file
++        return self.x * other.x + self.y * other.y
++
++    def subtract(self, other):
++        return Vector2(self.x - other.x, self.y - other.y)
+\ No newline at end of file
+@@ End Change #4 Hunk @@

@@ -1,0 +1,23 @@
+@@ -1,2 +1 @@
+-# Quaternion class for 3D rotations
+-# Version 1: Basic implementation
++import math
+@@ -15 +14 @@ class Quaternion:
+-        return (self.w ** 2 + self.x ** 2 + self.y ** 2 + self.z ** 2) ** 0.5
++        return math.sqrt(self.w ** 2 + self.x ** 2 + self.y ** 2 + self.z ** 2)
+@@ -17,0 +17 @@ class Quaternion:
++        # Optimized multiplication
+@@ -23,10 +23 @@ class Quaternion:
+-        )
+-
+-    def inverse(self):
+-        norm_sq = self.norm() ** 2
+-        if norm_sq == 0:
+-            raise ValueError("Cannot invert zero quaternion")
+-        conj = self.conjugate()
+-        return Quaternion(conj.w / norm_sq, conj.x / norm_sq, conj.y / norm_sq, conj.z / norm_sq)
+-
+-# End of Quaternion
+\ No newline at end of file
++        )
+\ No newline at end of file
