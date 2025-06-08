@@ -132,6 +132,12 @@ def apply_changes(file_path: Path, diff: str, llm_response: str) -> str:
             change_num = int(match.group(1))
             decision = match.group(2).lower()
             approvals[f"Change #{change_num}"] = decision == "yes"
+        else:
+            match = re.match(r'Change #(\d+),\s*<Merge_Replace_Hunk>(.*)</Merge_Replace_Hunk>', line)
+            if match:
+                change_num = int(match.group(1))
+                replacement = match.group(2).split('\\n')
+                approvals[f"Change #{change_num}"] = replacement
 
     # Get hunks from diff
     _, hunks = add_change_numbers(diff, file_path)
@@ -144,7 +150,7 @@ def apply_changes(file_path: Path, diff: str, llm_response: str) -> str:
         if change_num not in approvals:
             continue  # Skip if no decision for this change
         
-        if approvals[change_num]:
+        if approvals[change_num] == True:
             continue # Skip yes's since we have those lines from the file
         
         # Extract line numbers
@@ -170,6 +176,9 @@ def apply_changes(file_path: Path, diff: str, llm_response: str) -> str:
                 og_lines.append(diff_line[1:])
             else:
                 added_lines = True
+                
+        if isinstance(approvals[change_num], list):
+            og_lines = approvals[change_num]
         
         if not added_lines: #idk why line numbers for hunks that only remove lines are shifted 1 back from what I would think, but...
             new_start += 1
@@ -200,7 +209,7 @@ if __name__ == '__main__':
         # Hardcoded LLM response for testing (matches 5 changes)
         llm_response = """Change #1, No
 Change #2, Yes
-Change #3, No
+Change #3, <Merge_Replace_Hunk>WOOOOOO! it's\\na thing!</Merge_Replace_Hunk>
 Change #4, No
 Change #5, No"""
         
