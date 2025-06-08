@@ -1,4 +1,3 @@
-import math
 
 class Vector3:
     def __init__(self, x, y, z):
@@ -9,9 +8,6 @@ class Vector3:
     def add(self, other):
         # Optimized addition
         return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
-
-    def magnitude(self):
-        return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
 
     def scale(self, factor):
         return Vector3(self.x * factor, self.y * factor, self.z * factor)
