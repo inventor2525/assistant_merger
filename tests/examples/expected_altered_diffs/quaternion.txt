@@ -29,6 +29,7 @@ class Quaternion:
             self.w * other.x + self.x * other.w + self.y * other.z - self.z * other.y,
             self.w * other.y - self.x * other.z + self.y * other.w + self.z * other.x,
             self.w * other.z + self.x * other.y - self.y * other.x + self.z * other.w
+        )
 @@ -23,10 +23 @@ (Change #4)
 -        )
 -
