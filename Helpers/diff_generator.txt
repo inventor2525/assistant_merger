@@ -1,0 +1,23 @@
+<AI_RESPONSE>
+### AI_BASH_START ###
+cd /home/charlie/Downloads/assistant_merger/tests/examples
+
+# Ensure expected_diffs directory exists
+mkdir -p expected_diffs
+
+# Generate diff for vector2.py, removing first 4 lines with sed
+git diff --unified=0 --no-index v1/vector2.py v2/vector2.py > temp_diff.txt
+sed '1,4d' temp_diff.txt > expected_diffs/vector2.txt
+
+# Generate diff for vector3.py, removing first 4 lines with sed
+git diff --unified=0 --no-index v1/vector3.py v2/vector3.py > temp_diff.txt
+sed '1,4d' temp_diff.txt > expected_diffs/vector3.txt
+
+# Generate diff for quaternion.py, removing first 4 lines with sed
+git diff --unified=0 --no-index v1/quaternion.py v2/quaternion.py > temp_diff.txt
+sed '1,4d' temp_diff.txt > expected_diffs/quaternion.txt
+
+# Clean up temporary file
+rm temp_diff.txt
+### AI_BASH_END ###
+<END_OF_INPUT>
