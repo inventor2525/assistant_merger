@@ -1,4 +1,4 @@
-@@ -0,0 +1,2 @@ (Change #1)
+@@ -0 +1,2 @@ (Change #1)
 +import math
 +
 @@ End Change #1 Hunk @@
@@ -8,13 +8,13 @@ class Vector2:
         self.y = y
 
     def add(self, other):
-@@ -6,0 +9 @@ (Change #2)
+@@ -6 +9,1 @@ (Change #2)
 +        # Optimized addition
 @@ End Change #2 Hunk @@
         return Vector2(self.x + other.x, self.y + other.y)
 
     def magnitude(self):
-@@ -10 +13 @@ (Change #3)
+@@ -10 +13,1 @@ (Change #3)
 -        return (self.x ** 2 + self.y ** 2) ** 0.5
 +        return math.sqrt(self.x ** 2 + self.y ** 2)
 @@ End Change #3 Hunk @@
@@ -29,7 +29,6 @@ class Vector2:
         return Vector2(self.x / mag, self.y / mag)
 
     def dot(self, other):
-        return self.x * other.x + self.y * other.y
 @@ -22 +25,4 @@ (Change #4)
 -        return self.x * other.x + self.y * other.y
 \ No newline at end of file

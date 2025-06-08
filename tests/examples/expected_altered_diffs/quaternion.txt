@@ -1,4 +1,4 @@
-@@ -1,2 +1 @@ (Change #1)
+@@ -1 +1,1 @@ (Change #1)
 -# Quaternion class for 3D rotations
 -# Version 1: Basic implementation
 +import math
@@ -15,13 +15,13 @@ class Quaternion:
         return Quaternion(self.w, -self.x, -self.y, -self.z)
 
     def norm(self):
-@@ -15 +14 @@ (Change #2)
+@@ -15 +14,1 @@ (Change #2)
 -        return (self.w ** 2 + self.x ** 2 + self.y ** 2 + self.z ** 2) ** 0.5
 +        return math.sqrt(self.w ** 2 + self.x ** 2 + self.y ** 2 + self.z ** 2)
 @@ End Change #2 Hunk @@
 
     def multiply(self, other):
-@@ -17,0 +17 @@ (Change #3)
+@@ -17 +17,1 @@ (Change #3)
 +        # Optimized multiplication
 @@ End Change #3 Hunk @@
         return Quaternion(
@@ -29,8 +29,7 @@ class Quaternion:
             self.w * other.x + self.x * other.w + self.y * other.z - self.z * other.y,
             self.w * other.y - self.x * other.z + self.y * other.w + self.z * other.x,
             self.w * other.z + self.x * other.y - self.y * other.x + self.z * other.w
-        )
-@@ -23,10 +23 @@ (Change #4)
+@@ -23 +23,1 @@ (Change #4)
 -        )
 -
 -    def inverse(self):
