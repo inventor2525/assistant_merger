@@ -188,9 +188,12 @@ if __name__ == '__main__':
     if error:
         print(f"Error: {error}")
     else:
+        print("Og Diff:\n")
+        print(diff)
+        
         # Print diff for LLM
         modified_diff, hunks = add_change_numbers(diff, path)
-        print("Diff for LLM:\n")
+        print("\nDiff for LLM:\n")
         print(modified_diff)
         print("\nHunks:", hunks)
         
