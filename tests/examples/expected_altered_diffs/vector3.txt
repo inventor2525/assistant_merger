@@ -1,0 +1,38 @@
+@@ -1,6 +1,4 @@ (Change #1)
+-# Vector3 class for 3D vector operations
+-# Version 1: Basic implementation
+-# Author: Charlie
++import math
+@@ End Change #1 Hunk @@
+ 
+ class Vector3:
+@@ -8,6 +6,7 @@ (Change #2)
+         self.y = y
+         self.z = z
+ 
++        # Optimized addition
+     def add(self, other):
+         return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
+@@ End Change #2 Hunk @@
+ 
+     def magnitude(self):
+@@ -14,7 +14,7 @@ (Change #3)
+     def magnitude(self):
+-        return (self.x ** 2 + self.y ** 2 + self.z ** 2) ** 0.5
++        return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
+@@ End Change #3 Hunk @@
+     def scale(self, factor):
+         return Vector3(self.x * factor, self.y * factor, self.z * factor)
+@@ -37,10 +37,3 @@ (Change #4)
+     def dot(self, other):
+         return self.x * other.x + self.y * other.y + self.z * other.z
+ 
+-    def cross(self, other):
+-        return Vector3(
+-            self.y * other.z - self.z * other.y,
+-            self.z * other.x - self.x * other.z,
+-            self.x * other.y - self.y * other.x
+-        )
+-
+-# End of Vector3 implementation
+@@ End Change #4 Hunk @@
