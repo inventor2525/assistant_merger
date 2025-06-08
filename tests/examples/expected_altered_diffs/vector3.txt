@@ -31,7 +31,6 @@ class Vector3:
         return Vector3(self.x / mag, self.y / mag, self.z / mag)
 
     def dot(self, other):
-        return self.x * other.x + self.y * other.y + self.z * other.z
 @@ -27,10 +22 @@ (Change #4)
 -        return self.x * other.x + self.y * other.y + self.z * other.z
 -
