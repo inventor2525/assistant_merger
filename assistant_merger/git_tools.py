@@ -57,6 +57,7 @@ def add_change_numbers(diff: str, file_path: Path) -> Tuple[str, List[Dict[str, 
 
     # Regex to match hunk headers like @@ -old,new +new,lines @@ or @@ -old +new,lines @@
     hunk_pattern = re.compile(r'^@@ -(\d+)(?:,\d+)? \+(\d+)(?:,(\d+))? @@(?: .*)?$')
+    hunk_pattern2 = re.compile(r'^(@@ .* @@)(?: .*)?$')
 
     for line in lines:
         hunk_match = hunk_pattern.match(line)
@@ -73,7 +74,9 @@ def add_change_numbers(diff: str, file_path: Path) -> Tuple[str, List[Dict[str, 
             new_start = int(hunk_match.group(2))
             new_lines = int(hunk_match.group(3)) if hunk_match.group(3) else 1
             # Reconstruct clean header without trailing text
-            hunk_start = f"@@ -{hunk_match.group(1)} +{new_start},{new_lines} @@"
+            
+            hunk_start = hunk_pattern2.match(line).group(1)
+            #hunk_start = f"@@ -{hunk_match.group(1)} +{new_start},{new_lines} @@"
             modified_lines.append(f"{hunk_start} (Change #{change_count})")
         else:
             current_hunk_lines.append(line)
