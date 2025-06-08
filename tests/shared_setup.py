@@ -8,6 +8,8 @@ import unittest
 
 class SharedGitTestCase(unittest.TestCase):
     def setUp(self):
+        self.maxDiff = None
+        
         # Create temporary directory for git repository
         self.temp_dir = Path(tempfile.mkdtemp())
         self.repo_path = self.temp_dir / "repo"

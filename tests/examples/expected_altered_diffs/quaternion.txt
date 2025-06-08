@@ -1,0 +1,47 @@
+@@ -1,2 +1 @@ (Change #1)
+-# Quaternion class for 3D rotations
+-# Version 1: Basic implementation
++import math
+@@ End Change #1 Hunk @@
+
+class Quaternion:
+    def __init__(self, w, x, y, z):
+        self.w = w
+        self.x = x
+        self.y = y
+        self.z = z
+
+    def conjugate(self):
+        return Quaternion(self.w, -self.x, -self.y, -self.z)
+
+    def norm(self):
+@@ -15 +14 @@ (Change #2)
+-        return (self.w ** 2 + self.x ** 2 + self.y ** 2 + self.z ** 2) ** 0.5
++        return math.sqrt(self.w ** 2 + self.x ** 2 + self.y ** 2 + self.z ** 2)
+@@ End Change #2 Hunk @@
+
+    def multiply(self, other):
+@@ -17,0 +17 @@ (Change #3)
++        # Optimized multiplication
+@@ End Change #3 Hunk @@
+        return Quaternion(
+            self.w * other.w - self.x * other.x - self.y * other.y - self.z * other.z,
+            self.w * other.x + self.x * other.w + self.y * other.z - self.z * other.y,
+            self.w * other.y - self.x * other.z + self.y * other.w + self.z * other.x,
+            self.w * other.z + self.x * other.y - self.y * other.x + self.z * other.w
+        )
+@@ -23,10 +23 @@ (Change #4)
+-        )
+-
+-    def inverse(self):
+-        norm_sq = self.norm() ** 2
+-        if norm_sq == 0:
+-            raise ValueError("Cannot invert zero quaternion")
+-        conj = self.conjugate()
+-        return Quaternion(conj.w / norm_sq, conj.x / norm_sq, conj.y / norm_sq, conj.z / norm_sq)
+-
+-# End of Quaternion
+\ No newline at end of file
++        )
+\ No newline at end of file
+@@ End Change #4 Hunk @@
