@@ -57,6 +57,7 @@ def add_change_numbers(diff: str, file_path: Path) -> Tuple[str, List[Dict[str, 
 
     # Regex to match hunk headers like @@ -old,new +new,lines @@ or @@ -old +new,lines @@
     hunk_pattern = re.compile(r'^@@ -(\d+)(?:,\d+)? \+(\d+)(?:,(\d+))? @@(?: .*)?$')
+    hunk_pattern2 = re.compile(r'^(@@ .* @@)(?: .*)?$')
 
     for line in lines:
         hunk_match = hunk_pattern.match(line)
@@ -69,11 +70,13 @@ def add_change_numbers(diff: str, file_path: Path) -> Tuple[str, List[Dict[str, 
                 })
                 current_hunk_lines = []
             change_count += 1
+            
             # Extract new file start line and number of lines
             new_start = int(hunk_match.group(2))
             new_lines = int(hunk_match.group(3)) if hunk_match.group(3) else 1
+            
             # Reconstruct clean header without trailing text
-            hunk_start = f"@@ -{hunk_match.group(1)} +{new_start},{new_lines} @@"
+            hunk_start = hunk_pattern2.match(line).group(1)
             modified_lines.append(f"{hunk_start} (Change #{change_count})")
         else:
             current_hunk_lines.append(line)
@@ -97,14 +100,15 @@ def add_change_numbers(diff: str, file_path: Path) -> Tuple[str, List[Dict[str, 
             continue
         new_start = int(hunk_match.group(2))
         new_lines = int(hunk_match.group(3)) if hunk_match.group(3) else 1
-        if new_lines == 0:
-            new_start += 1
         
-        # Get lines after this hunk up to previous hunk (or end)
-        start_idx = new_start - 1 + new_lines  # 0-based index
-        post_hunk_lines = file_lines[start_idx:prev_end]
-        # Update prev_end for next iteration
-        prev_end = new_start - 1
+        if new_lines == 0:
+            post_hunk_lines = file_lines[new_start:prev_end]
+            prev_end = new_start
+        else:
+            start_idx = new_start - 1 + new_lines
+            post_hunk_lines = file_lines[start_idx:prev_end]
+            prev_end = new_start - (1 if len(post_hunk_lines)>0 else 0)
+        
         # Build hunk output
         hunk_output = [
             f"{hunk['header']} ({hunk['number']})",
@@ -167,20 +171,16 @@ def apply_changes(file_path: Path, diff: str, llm_response: str) -> str:
         
         # Get original content:
         og_lines = []
-        added_lines = False
         for diff_line in diff_lines:
             if diff_line[0] == ' ':
-                added_lines = True
                 og_lines.append(diff_line[1:])
             elif diff_line[0] == '-':
                 og_lines.append(diff_line[1:])
-            else:
-                added_lines = True
                 
         if isinstance(approvals[change_num], list):
             og_lines = approvals[change_num]
         
-        if not added_lines: #idk why line numbers for hunks that only remove lines are shifted 1 back from what I would think, but...
+        if new_lines == 0:
             new_start += 1
             new_end += 1
             
