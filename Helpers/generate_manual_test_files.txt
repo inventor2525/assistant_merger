@@ -1,0 +1,26 @@
+<AI_RESPONSE>
+### AI_BASH_START ###
+mkdir -p /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/input
+mkdir -p /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/expected_output
+touch /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/input/vector2_1.txt
+touch /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/input/vector2_2.txt
+touch /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/input/vector2_3.txt
+touch /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/input/vector2_4.txt
+touch /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/input/vector3_1.txt
+touch /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/input/vector3_2.txt
+touch /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/input/vector3_3.txt
+touch /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/input/vector3_4.txt
+touch /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/input/quaternion_3.txt
+touch /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/input/quaternion_4.txt
+cp /home/charlie/Downloads/assistant_merger/tests/examples/v1/vector2.py /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/expected_output/vector2_1.py
+cp /home/charlie/Downloads/assistant_merger/tests/examples/v1/vector2.py /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/expected_output/vector2_2.py
+cp /home/charlie/Downloads/assistant_merger/tests/examples/v1/vector2.py /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/expected_output/vector2_3.py
+cp /home/charlie/Downloads/assistant_merger/tests/examples/v1/vector2.py /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/expected_output/vector2_4.py
+cp /home/charlie/Downloads/assistant_merger/tests/examples/v1/vector3.py /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/expected_output/vector3_1.py
+cp /home/charlie/Downloads/assistant_merger/tests/examples/v1/vector3.py /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/expected_output/vector3_2.py
+cp /home/charlie/Downloads/assistant_merger/tests/examples/v1/vector3.py /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/expected_output/vector3_3.py
+cp /home/charlie/Downloads/assistant_merger/tests/examples/v1/vector3.py /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/expected_output/vector3_4.py
+cp /home/charlie/Downloads/assistant_merger/tests/examples/v1/quaternion.py /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/expected_output/quaternion_3.py
+cp /home/charlie/Downloads/assistant_merger/tests/examples/v1/quaternion.py /home/charlie/Downloads/assistant_merger/tests/examples/manual_tests/expected_output/quaternion_4.py
+### AI_BASH_END ###
+<END_OF_INPUT>
