@@ -36,7 +36,7 @@ def get_git_diff(file_path: Path) -> Tuple[str, Optional[str]]:
     except ValueError as e:
         return "", f"Invalid file path relative to repo: {e}"
 
-def add_change_numbers(diff: str, file_path: Path) -> Tuple[str, List[Dict[str, str]]]:
+def add_change_numbers(diff: str, file_path: Path, add_line_numbers: bool = False) -> Tuple[str, List[Dict[str, str]]]:
     """Add change numbers to diff hunks, include post-hunk content, and return modified diff with hunk metadata."""
     if not diff:
         return "", []
@@ -103,10 +103,16 @@ def add_change_numbers(diff: str, file_path: Path) -> Tuple[str, List[Dict[str, 
         
         if new_lines == 0:
             post_hunk_lines = file_lines[new_start:prev_end]
+            if add_line_numbers:
+                post_hunk_lines = [f"{new_start + i + 1:4d} {line}" for i, line in enumerate(post_hunk_lines)]
+            print(f"Debug: Hunk {hunk['number']}: new_start={new_start}, new_lines={new_lines}, post_hunk_lines={len(post_hunk_lines)}")
             prev_end = new_start
         else:
             start_idx = new_start - 1 + new_lines
             post_hunk_lines = file_lines[start_idx:prev_end]
+            if add_line_numbers:
+                post_hunk_lines = [f"{start_idx + i + 1:4d} {line}" for i, line in enumerate(post_hunk_lines)]
+            print(f"Debug: Hunk {hunk['number']}: new_start={new_start}, new_lines={new_lines}, start_idx={start_idx}, post_hunk_lines={len(post_hunk_lines)}")
             prev_end = new_start - (1 if len(post_hunk_lines)>0 else 0)
         
         # Build hunk output
