@@ -120,7 +120,7 @@ def add_change_numbers(diff: str, file_path: Path) -> Tuple[str, List[Dict[str, 
     result_lines = file_lines[0:prev_end] + result_lines
     return "\n".join(result_lines), hunks
 
-def apply_changes(file_path: Path, diff: str, llm_response: str, add_line_numbers: bool = False) -> str:
+def apply_changes(file_path: Path, diff: str, llm_response: str) -> str:
     """Apply or revert changes based on LLM response and return merged file content."""
     try:
         with open(file_path, 'r') as f:
@@ -189,15 +189,6 @@ def apply_changes(file_path: Path, diff: str, llm_response: str, add_line_number
         after_hunk = merged_lines[new_end:]
         merged_lines = before_hunk + og_lines + after_hunk
 
-    # Optionally add line numbers
-    if add_line_numbers:
-        numbered_lines = []
-        current_line = 1
-        for line in merged_lines:
-            numbered_lines.append(f"{current_line:4d} {line}")
-            current_line += 1
-        return "\n".join(numbered_lines)
-    
     return "\n".join(merged_lines)
 
 if __name__ == '__main__':
