@@ -121,7 +121,11 @@ def add_change_numbers(diff: str, file_path: Path, add_line_numbers: bool = Fals
         ] + post_hunk_lines
         # Prepend to result (building in reverse)
         result_lines = hunk_output + result_lines
-    result_lines = file_lines[0:prev_end] + result_lines
+    if prev_end>0:
+        first_lines = file_lines[0:prev_end]
+        if add_line_numbers:
+            first_lines = [f"{i + 1:4d} {line}" for i, line in enumerate(first_lines)]
+        result_lines = first_lines + result_lines
     return "\n".join(result_lines), hunks
 
 def apply_changes(file_path: Path, diff: str, llm_response: str) -> str:

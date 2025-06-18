@@ -5,7 +5,7 @@ from assistant_merger.git_tools import get_git_diff, add_change_numbers
 class TestLineNumbers(SharedGitTestCase):
     def test_line_numbers_vector2(self):
         """Test line numbers in modified diff output for vector2.py."""
-        filename = "vector2.py"
+        filename = "utils_2.py"
         repo_file_path = self.file_paths.get(filename)
         if not repo_file_path:
             self.skipTest(f"No repo file for {filename}")
