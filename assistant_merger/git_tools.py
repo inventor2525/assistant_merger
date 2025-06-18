@@ -128,7 +128,7 @@ def apply_changes(file_path: Path, diff: str, llm_response: str) -> str:
     """Apply or revert changes based on LLM response and return merged file content."""
     try:
         with open(file_path, 'r') as f:
-            file_lines = f.read().splitlines()
+            file_lines = f.read().split("\n")
     except Exception as e:
         return f"Error: Could not read file: {e}"
 
