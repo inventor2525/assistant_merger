@@ -190,7 +190,7 @@ def apply_changes(file_path: Path, diff: str, llm_response: str) -> str:
             
         # Revert:
         before_hunk = merged_lines[:new_start]
-        after_hunk = merged_lines[new_end:]
+        after_hunk = merged_lines[new_end:] if '\\ No newline at end of file' not in hunk['content'] else []
         merged_lines = before_hunk + og_lines + after_hunk
 
     return "\n".join(merged_lines)
